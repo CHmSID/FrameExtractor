@@ -5,3 +5,7 @@ A utility application for extracting frames from videos
 * install opencv* packages
 * install python-opencv
 * install python
+
+##How to use
+In the terminal write
+"python extract.py (list of files)"
