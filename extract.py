@@ -3,6 +3,7 @@
 # This code takes filenames (videos) as arguments and extracts each frame
 # from them.
 
+import hashlib
 import sys
 import os
 import cv2
@@ -14,6 +15,22 @@ def printUsage():
 
 def printInfo():
 	print "Python Frame Etractor, using OpenCV " + cv2.__version__
+
+def hashName(destination, fileName, index):
+	fileName = fileName + "%d" % index
+	hashed = hashlib.sha512(fileName)
+	hashed = hashed.hexdigest()
+	index += 1
+
+	while os.path.exists(destination + hashed + ".jpg"):
+		fileName = fileName + "%d" % index
+		hashed = hashlib.sha512(fileName)
+		hashed = hashed.hexdigest()
+		index += 1
+
+	print index
+
+	return index, hashed
 
 def processVideo(destination, videoFile):
 	# Open the file for reading
@@ -29,8 +46,9 @@ def processVideo(destination, videoFile):
 
 	# Save the frame to file
 	if ret:
-		cv2.imwrite(destination + videoFile + "%d.jpg" % index, frame)
-		index += 1
+		index, hashed = hashName(destination, videoFile, index)
+		cv2.imwrite(destination + hashed + ".jpg", frame)
+		# index += 1
 
 	while ret:
 		# Extract a frame
@@ -38,9 +56,10 @@ def processVideo(destination, videoFile):
 
 		# Save the frame to file
 		if ret:
-			cv2.imwrite(destination + videoFile + "%d.jpg" % index, frame)
+			index, hashed = hashName(destination, videoFile, index)
+			cv2.imwrite(destination + hashed + ".jpg", frame)
 
-		index += 1
+		# index += 1
 
 	file.release()
 
