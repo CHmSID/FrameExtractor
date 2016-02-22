@@ -4,13 +4,15 @@
 # from them.
 
 import sys
+import os
 import cv2
 
 def printUsage():
 	print "Usage:"
-	print "extract.py file [file, ...]"
+	print "extract.py dest file [file, ...]"
+	print "Where dest is a relative path ending with /"
 
-def processVideo(videoFile):
+def processVideo(destination, videoFile):
 	# Open the file for reading
 	file = cv2.VideoCapture(videoFile)
 	index = 0	# Used to number the frames
@@ -18,9 +20,13 @@ def processVideo(videoFile):
 	# Extract a frame
 	ret, frame = file.read()
 
+	if destination != ".":
+		os.mkdir("./" + destination)
+
 	# Save the frame to file
 	if ret:
-		cv2.imwrite(videoFile + "%d.jpg" % index, frame)
+		cv2.imwrite(destination + videoFile + "%d.jpg" % index, frame)
+		index += 1
 
 	while ret:
 		# Extract a frame
@@ -28,7 +34,7 @@ def processVideo(videoFile):
 
 		# Save the frame to file
 		if ret:
-			cv2.imwrite(videoFile + "%d.jpg" % index, frame)
+			cv2.imwrite(destination + videoFile + "%d.jpg" % index, frame)
 
 		index += 1
 
@@ -36,15 +42,18 @@ def processVideo(videoFile):
 
 def main(argv):
 	print "Python Frame Etractor, using OpenCV " + cv2.__version__
-	print "Preparing to process %d videos" % len(argv)
+	print "Preparing to process %d videos" % (len(argv) - 1)
 
-	for file in argv:
-		print "Extracting from " + file
-		processVideo(file)
+	destination = argv[0]
+	print "Extracting to " + destination
+
+	for index in range(1, len(argv)):
+		print "From " + argv[index]
+		processVideo(destination, argv[index])
 
 if __name__ == "__main__":
-	if len(sys.argv) == 1:
-		print "Pass at least one argument"
+	if len(sys.argv) <= 2:
+		print "Pass at least two arguments"
 		print ""
 		printUsage()
 		sys.exit()
