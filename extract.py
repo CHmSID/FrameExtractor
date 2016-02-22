@@ -12,6 +12,9 @@ def printUsage():
 	print "extract.py dest file [file, ...]"
 	print "Where dest is a relative path ending with /"
 
+def printInfo():
+	print "Python Frame Etractor, using OpenCV " + cv2.__version__
+
 def processVideo(destination, videoFile):
 	# Open the file for reading
 	file = cv2.VideoCapture(videoFile)
@@ -20,7 +23,8 @@ def processVideo(destination, videoFile):
 	# Extract a frame
 	ret, frame = file.read()
 
-	if destination != ".":
+	# If the destination direction doesn't exist, create it
+	if not os.path.exists("./" + destination):
 		os.mkdir("./" + destination)
 
 	# Save the frame to file
@@ -41,7 +45,6 @@ def processVideo(destination, videoFile):
 	file.release()
 
 def main(argv):
-	print "Python Frame Etractor, using OpenCV " + cv2.__version__
 	print "Preparing to process %d videos" % (len(argv) - 1)
 
 	destination = argv[0]
@@ -52,6 +55,10 @@ def main(argv):
 		processVideo(destination, argv[index])
 
 if __name__ == "__main__":
+	if len(sys.argv) > 1 and sys.argv[1] == "--i":
+		printInfo()
+		sys.exit()
+
 	if len(sys.argv) <= 2:
 		print "Pass at least two arguments"
 		print ""
