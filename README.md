@@ -8,4 +8,4 @@ A utility application for extracting frames from videos
 
 ##How to use
 In the terminal write
-"python extract.py (list of files)"
+"python extract.py destination_directory (list of files)"
