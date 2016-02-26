@@ -28,8 +28,6 @@ def hashName(destination, fileName, index):
 		hashed = hashed.hexdigest()
 		index += 1
 
-	print index
-
 	return index, hashed
 
 def processVideo(destination, videoFile):
@@ -46,6 +44,11 @@ def processVideo(destination, videoFile):
 
 	# Save the frame to file
 	if ret:
+		# the following line was taken from
+		# http://nerdfever.com/numpy-goodness-deinterlacing-video-in-numpy/
+		# deinterlacing the video
+		frame[1:-1:2] = frame[0:-2:2]/2 + frame[2::2]/2
+
 		index, hashed = hashName(destination, videoFile, index)
 		cv2.imwrite(destination + hashed + ".jpg", frame)
 		# index += 1
@@ -56,6 +59,7 @@ def processVideo(destination, videoFile):
 
 		# Save the frame to file
 		if ret:
+			frame[1:-1:2] = frame[0:-2:2]/2 + frame[2::2]/2
 			index, hashed = hashName(destination, videoFile, index)
 			cv2.imwrite(destination + hashed + ".jpg", frame)
 
