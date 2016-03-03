@@ -47,10 +47,10 @@ def processVideo(destination, videoFile):
 		# the following line was taken from
 		# http://nerdfever.com/numpy-goodness-deinterlacing-video-in-numpy/
 		# deinterlacing the video
-		frame[1:-1:2] = frame[0:-2:2]/2 + frame[2::2]/2
+		# frame[1:-1:2] = frame[0:-2:2]/2 + frame[2::2]/2
 
 		index, hashed = hashName(destination, videoFile, index)
-		cv2.imwrite(destination + hashed + ".jpg", frame)
+		cv2.imwrite(destination + hashed + ".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 90])
 		# index += 1
 
 	while ret:
@@ -59,9 +59,9 @@ def processVideo(destination, videoFile):
 
 		# Save the frame to file
 		if ret:
-			frame[1:-1:2] = frame[0:-2:2]/2 + frame[2::2]/2
+			# frame[1:-1:2] = frame[0:-2:2]/2 + frame[2::2]/2
 			index, hashed = hashName(destination, videoFile, index)
-			cv2.imwrite(destination + hashed + ".jpg", frame)
+			cv2.imwrite(destination + hashed + ".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 90])
 
 		# index += 1
 
