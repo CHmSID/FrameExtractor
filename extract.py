@@ -42,6 +42,8 @@ def processVideo(destination, videoFile):
 	if not os.path.exists("./" + destination):
 		os.mkdir("./" + destination)
 
+	os.mkdir("./" + destination + "hq/");
+
 	# Save the frame to file
 	if ret:
 		# the following line was taken from
@@ -50,7 +52,8 @@ def processVideo(destination, videoFile):
 		frame[1:-1:2] = frame[0:-2:2]/2 + frame[2::2]/2
 
 		index, hashed = hashName(destination, videoFile, index)
-		cv2.imwrite(destination + hashed + ".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 90])
+		cv2.imwrite(destination + hashed + ".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
+		cv2.imwrite(destination + "hq/" + hashed + ".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
 		# index += 1
 
 	while ret:
@@ -61,7 +64,8 @@ def processVideo(destination, videoFile):
 		if ret:
 			frame[1:-1:2] = frame[0:-2:2]/2 + frame[2::2]/2
 			index, hashed = hashName(destination, videoFile, index)
-			cv2.imwrite(destination + hashed + ".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 90])
+			cv2.imwrite(destination + hashed + ".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
+			cv2.imwrite(destination + "hq/" + hashed + ".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
 
 		# index += 1
 
